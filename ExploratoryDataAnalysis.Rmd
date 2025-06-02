@@ -1,0 +1,59 @@
+---
+title: "Exploratory Data Analysis"
+author: "Colin White and Delaney Clifford"
+date: "2023-10-17"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo = FALSE}
+finaldata1<-read.csv("/Users/colin.10/Desktop/STAT 3220/Project/FinalData.csv")
+```
+
+# Exploratory Data Analysis
+
+### Histogram of the Response and Correlation of Quantitative Explanatory Variables with the Response
+
+```{r, echo = FALSE, out.width="50%", fig.show='hold'}
+hist(finaldata1$MedianHouseholdIncome, xlab="Median Household Income in the US (2021)", 
+     main="Histogram of Median Household Income")
+round(cor(finaldata1[6:10],finaldata1$MedianHouseholdIncome),3)
+```
+
+-   When looking at the histogram of Median Household Income in the US (2021), we can see that the response variable is approximately unimodal with somewhat of right skew. There appears to be an outlier in the 75000-80000 bin, but overall it seems appropriate for use in a regression model due to its overall symmetry.
+-   The correlations between the quantitative explanatory variables and the response draw some interesting conclusions. The variables for Obesity Rate in a state as well as the Percent of the State with a Bachelor's Degree or Higher appear to be the most correlated with the response showing both strong negative and strong positive linear relationships, respectively. The other three variables do not appear to have strong linear relationships, but there may be possibility for additional quadratic or logarithmic functions to be added for some of these variables in later parts of the research process for a final regression model.  
+
+### Specific A: Do individuals living in a state where Trump won in the 2020 presidential election have a higher median household income than those that live in a state where Biden won?
+
+```{r, echo = FALSE, out.width="50%", fig.show='hold'}
+tapply(finaldata1$MedianHouseholdIncome,finaldata1$ElectionResults,summary)
+boxplot(MedianHouseholdIncome~ElectionResults,data=finaldata1)
+```
+
+-   To examine the relationship between a State's Median Household Income and the political party that won the state in the 2020 presidential election we decided to create a boxplot. When looking at the summary statistics you can quickly see that the states that went to Biden in the last presidential election have a higher median household income. The boxplot also demonstrates this difference. Furthermore, since the median household income for states that were won by Biden is significantly different from the median household income for states that were won by Trump, we believe there is a relationship between median household income and which political party won the state in the last presidential election.
+
+### Specific B: Do states with a high percentage of people with bachelor degrees, or better, have a higher median household income?
+
+```{r, echo = FALSE, out.width="50%", fig.show='hold'}
+for (i in names(finaldata1)[10]) {
+  plot(finaldata1[,i], finaldata1$MedianHouseholdIncome,xlab=i,ylab="Median Household Income")
+}
+```
+
+-   We created a scatter plot to represent the relationship between Median household Income and the Percent of People in the state who have at least a Bachelor's Degree. We chose a scatter plot because both variables are quantitative. Looking at the scatter plot you can tell there is a strong positive linear relationship between median household income and the percent of people in the state who have at least a bachelor's degree. As mentioned before, the correlation coefficient is 0.801, so this also proves that there is a strong positive linear relationship.
+
+### Specific C: Do states with a high population density have a higher median household income than states with medium or low population density?
+
+```{r, echo = FALSE, out.width="50%", fig.show='hold'}
+tapply(finaldata1$MedianHouseholdIncome,finaldata1$PopulationDen,summary)
+boxplot(MedianHouseholdIncome~PopulationDen,finaldata1, 
+        xlab = "Levels of Population Density",
+        ylab ="Median Household Income in the US (2021)",
+        main = "Boxplot of Median Household Income by Level of Population Density")
+```
+
+-   Based on the information provided from the boxplot and statistical summary above, we are able to deduce that there appears to be a relationship between the qualitative variable (Population Density) and the response (Median Household Income). We are able to see this because each level of population density has a different mean value than the others, signifying the levels affect the response in some way.
+

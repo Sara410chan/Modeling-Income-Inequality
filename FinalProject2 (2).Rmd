@@ -1,0 +1,370 @@
+---
+title: "Income Disparities Across the United States"
+author: 'Otter Fam: Sara Chan, Delaney Clifford, Melanie Gonzalez, and Colin White'
+fontsize: 12pt
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+urlcolor: black
+geometry: margin=1in
+header-includes:
+- \usepackage{setspace}
+- \onehalfspacing
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, highlight=FALSE, comment=NA, warnings=FALSE,message=FALSE)
+```
+
+```{r, echo=FALSE, warning=FALSE,results=FALSE}
+library(corrplot)
+library(Hmisc)
+library(car)
+library(olsrr)
+finaldata<-read.csv("/Users/sarachan/Desktop/FinalData (1).csv")
+```
+
+```{=tex}
+\begin{center}
+
+\includegraphics{/Users/colin.10/Desktop/STAT 3220/Project/FinalProjPic.JPEG}
+
+\end{center}
+```
+\newpage
+
+## Introduction
+
+As of 2021, "the ratio of the 90th-to-10th percentile increased from 12.90 to 13.53 (US Census Bureau, 2021), demonstrating a striking disparity of income distribution within the United States. This disparity is significant, especially for those in the lower socioeconomic bracket as they usually do not reap the same benefits as their counterparty. Income inequality impacts one's health, education, and social mobility. Therefore, it is critical to analzye these disparities in order for American institutions to increase their efforts on behalf of those living in low income households (Smeeding, 2005). This research aims to highlight the determinants of income disparities across the states, through the relationship of eight explanatory variables and the response variable median household income across the United States. 1. Do individuals living in a state where Trump won in the 2020 presidential election have a higher median household income than those that live in a state where Biden won? 2. Do states with a high percentage of people with bachelor degrees, or better, have a higher median household income? 3. Do states with a high population density have a higher median household income than states with medium or low population density
+
+## Methods and Analysis
+
+First we looked at the histogram of Median Household Income to ensure it was appropriate for regression and came to the conclusion that it was because it's unimodal. Next, we looked at the correlations between that quantitative explanatory variables and the response. Next we did exploratory data analysis including multicollinearity and variable screening. First we examined a scatter plot of each quantitative variable and their correlations with median household income and concluded there did not appear to be any quadratic or logarithmic relationships. Then, we created summary statistics and boxplots for each qualitative variable. Since, the mean and median values for each level of each qualitative variable differed they are useful for regression. We then checked for multicollinearity by assessing the correlation between all the quantitative variables. The Percent Bachelors and Obesity Rate Variables are the only two that appear to have some sort of multicollinearity issue, so we created an interaction variable in our upcoming models then tested to see if either needed to be removed by looking at the VIFs. Since none of the variables had VIFs of over 10 and the mean VIF was not greater than 3 there did not appear to be any severe multicollinearity issues. We then did variable screening with the quantitative variables. Only three of five were significant in our testing: Percent of the State with a Bachelor's Degree or Higher, State Obesity Rates, and Median Age of State Residents. We only used these three in the next stages of the process. Next we added our qualitative variables to the model. To make sure the variable Population Density variable was significant, we performed a nested F test. Our conclusion was that the population density variable is significant at predicting median household income so we did not remove it. Next, we created interaction plots to test for interactions. There appeared to be an interaction between the Population Density and Election Results variables because the lines cross at the "low" point of population density. We added this interaction in the analysis. We then looked at scatter plots comparing our qualitative and quantitative variables. There appeared to be two interactions here that were notable, Percent Bachelors with Election Results and Obesity Rate with Election Results. We added these interactions in as well. Next, we performed significance testing on our model with these new interactions. We performed a nested F test to test the interaction between Election Results and Population Density. We concluded that the population density and election results variable interaction was not significant at predicting median household income. We removed the interaction from the model and tested the variables individually. We then performed global and individual testing in order to further better our model. We first conducted a global F test. We concluded that the model with these nine variables was accurate in predicting our response variable, Median Household Income. Then we tested some of the individual variables. First, we tested the median age variable. We concluded that the median age variable did not contribute information for predicting a state's median household income. We removed the variable and refit the model. We noticed that the Election Results variable appeared to not be a good predictor of the response, but its interactions with other variables appeared to be significant which lead us to keep the variable by itself in the model. We then moved onto the analysis of assumptions. Based on the residual plots, we did not violate the lack of fit assumption. The Residual Plots and Residual vs Fitted the Fitted Values appear to have some fanning out, but nothing too extreme, so constant variance is not violated. The data is not perfectly normal based on the histogram and QQ plots, but it meets basic assumptions. Finally, the assumption of independence is not violated because we are not using time series data. To attempt to fix the fanning out issue, we transformed the response variable using a logarithmic function. We then examined outliars by looking at Cook's distance and leveraged vs studentized residuals. We removed the influential observations and created a new model. We then attempted a weighted least squares model to account for the possibility of certain states needing to be weighted higher within the regression model due to their size and influence. We fit this new model under these assumptions and compared it to our transformed logarithmic model. The transformed logarithmic model still appeared to explain more of the variability of the response, so we chose this model instead of the weighted least squares one.
+
+## Results
+
+Our final model is:$\hat{log(MedianHouseholdIncome)}=14.91-0.164Obesity-0.095PercentBachelors-0.217ElectionResultsRepublican-0.083PopulationDenLow-0.053PopulationDensityMedium+0.107SexMajorityMale+0.004Obesity*PercentBachelors-0.025PercentBachelors*ElectionResultsRepublican+0.034Obesity*ElectionResultsRepublican$
+
+Our final model uses nine betas to predict the log of median household income. To interpret its statistical usefulness we preformed a global F-test. Our null hypothesis is that the model is not adequate and our alternative hypothesis is that the model is adequate. The significance level is 0.05 and the p-value is less than 0.000. Since our p-value is less than the significance level we rejected the null hypothesis and concluded that our model is adequate at predicting median household income. Additionally, the adjusted R-squared of the model was 0.8736 suggesting that the model accounts for 87.36% of the variability in our response, Median Household Income. While the adjusted R-squared is relatively high the model was not particularly useful for predictions. We used the model to predict the median household income of Alabama and Arizona and the predicted values for median household income were \$9,963.75 and \$11,856.83 lower than the actual values for median household income respectivly. These are huge differences indicating that the model is not very good for prediction.
+
+## Conclusions
+
+Our prediction equation tells you how obesity rate, educational attainment, political association, population density, and dominant gender effect median household income in a state. This equation is essential to policymakers because it examines the factors that can contribute to disparities in median household income across states. This equation could be used if policymakers wanted to implement a new program to target wealth disparity. If they want to understand wealth disparities across the states before and after implementing their program they may find it useful to use this equation. Overall, it is a sufficient model according to our f-test. However, since it was not very useful for prediction, there might be variables that are larger predictors of median household income. In the future we would want to add more variables that might have a greater effect on median household income. We could include the percent of the population who live in rural households vs urban households since people living in rural areas have lower median household income (Bishaw 2022).
+
+\newpage
+
+## Appendix A: Data Dictionary
+
+|         Variable Name          |   Abbreviated Name    |                                                                Description                                                                 |
+|:------------------------------:|:---------------------:|:------------------------------------------------------------------------------------------------------------------------------------------:|
+|           US States            |        States         |                                            All 50 of the US's States shown as their given name                                             |
+|        Predominant Sex         |      MajoritySex      |                             The predominant sex (Male or Female) in each state in the US during the year 2021                              |
+| Presidential Election Results  |    ElectionResults    |              The United States 2020 presidential election showing the majority party (Democratic or Republican) in each state              |
+|       Population Density       |     PopulationDen     |  The population density in each state described as low, medium, or high depending on the amounts of the 1st and 3rd interquartile ranges   |
+|    Median Household Income     | MedianHouseholdIncome |                              The median household income in each state in the year 2021, measured in dollars                               |
+|        Total Population        |       TotalPop        |                                    Demonstrates the total population in each state during the year 2021                                    |
+|           Median Age           |       MedianAge       |                        The median age individual's in each state for the year 2021 demonstrated as a numeric value                         |
+|       Unemployment Rate        |   UnemploymentRate    |                        Demonstrated as a percentage to reflect the unemployment rate during 2021 within each state                         |
+|          Obesity Rate          |        Obesity        |                                 The obesity rate in each state the year of 2021, displayed as a percentage                                 |
+| Percent with Bachelor's Degree |   PercentBachelors    | The percentage of individuals who are 25 years and older within each state during the year 2021 who received a bachelor's degree or higher |
+
+\newpage
+
+## Appendix B: Data Rows
+
+```{r, echo=FALSE}
+head(finaldata)
+```
+
+\newpage
+
+## Appendix C: Final Model Output and Plots
+
+```{r, echo=FALSE, warning=FALSE, results=FALSE, include=FALSE}
+## This code chunk can be used to execute any functions or summaries that will not be included in your output
+
+##Checking Appropriateness for regression##
+hist(finaldata$MedianHouseholdIncome, xlab="Median Household Income", main="Histogram of Household Income")
+
+##EDA Analysis including multicollinearity & screening##
+for (i in names(finaldata)[6:10]) {
+  plot(finaldata[,i], finaldata$MedianHouseholdIncome,xlab=i,ylab="Median Household Income")
+}
+round(cor(finaldata[6:10],finaldata$MedianHouseholdIncome,use="complete.obs"),3)
+
+tapply(finaldata$MedianHouseholdIncome,finaldata$SexMajority,summary)
+tapply(finaldata$MedianHouseholdIncome,finaldata$ElectionResults,summary)
+tapply(finaldata$MedianHouseholdIncome,finaldata$PopulationDen,summary)
+
+boxplot(MedianHouseholdIncome~SexMajority,finaldata, ylab="Median Household Income")
+boxplot(MedianHouseholdIncome~ElectionResults,finaldata, ylab="Median Household Income")
+boxplot(MedianHouseholdIncome~PopulationDen,finaldata, ylab="Median Household Income")
+
+incomecor<-round(cor(finaldata[,6:10]),4)
+incomecor
+
+incomecor2<-rcorr(as.matrix(finaldata[,6:10]))
+incomecor2
+
+corrplot(incomecor)
+
+income1<-lm(MedianHouseholdIncome~
+              TotalPop+MedianAge+UnemploymentRate+Obesity+PercentBachelors,
+            data=finaldata)
+summary(income1)
+
+income1vif<-round(vif(income1),3)
+income1vif
+mean(income1vif)
+
+ols_step_backward_p(income1,prem=0.15,details=F)
+
+ols_step_forward_p(income1,penter=0.15,details=F)
+
+ols_step_both_p(income1,pent=0.15,prem=0.15,details=F)
+
+income2<-lm(MedianHouseholdIncome~.-State-UnemploymentRate-TotalPop, data=finaldata)
+summary(income2)
+
+redincome2<-lm(MedianHouseholdIncome~.-State-UnemploymentRate-TotalPop-PopulationDen, data=finaldata)
+anova(redincome2,income2)
+
+interaction.plot(finaldata$SexMajority, finaldata$ElectionResults, finaldata$MedianHouseholdIncome,fun=mean,trace.label="Election Results", xlab="Sex Majority",ylab="Median Household Income")
+
+interaction.plot(finaldata$SexMajority, finaldata$PopulationDen, finaldata$MedianHouseholdIncome,fun=mean,trace.label="Population Density", xlab="Sex Majority",ylab="Median Household Income")
+
+interaction.plot(finaldata$PopulationDen, finaldata$ElectionResults, finaldata$MedianHouseholdIncome,fun=mean,trace.label="Election Results", xlab="Population Density",ylab="Median Household Income")
+
+plot(MedianHouseholdIncome~PercentBachelors, col=factor(SexMajority),data=finaldata,xlab="Percent Bachelors",ylab="Median Household Income") 
+legend("topright",
+       legend = levels(factor(finaldata$SexMajority)),
+       pch = 19,
+       col = factor(levels(factor(finaldata$SexMajority))))
+plot(MedianHouseholdIncome~PercentBachelors, col=factor(PopulationDen),data=finaldata,xlab="Percent Bachelors",ylab="Median Household Income") 
+legend("topright",
+       legend = levels(factor(finaldata$PopulationDen)),
+       pch = 19,
+       col = factor(levels(factor(finaldata$PopulationDen))))
+plot(MedianHouseholdIncome~PercentBachelors, col=factor(ElectionResults),data=finaldata,xlab="Percent Bachelors",ylab="Median Household Income") 
+legend("topright",
+       legend = levels(factor(finaldata$ElectionResults)),
+       pch = 19,
+       col = factor(levels(factor(finaldata$ElectionResults))))
+
+
+plot(MedianHouseholdIncome~Obesity, col=factor(SexMajority),data=finaldata,xlab="Obesity Rate",ylab="Median Household Income") 
+legend("topright",
+       legend = levels(factor(finaldata$SexMajority)),
+       pch = 19,
+       col = factor(levels(factor(finaldata$SexMajority))))
+plot(MedianHouseholdIncome~Obesity, col=factor(PopulationDen),data=finaldata,xlab="Obesity Rate",ylab="Median Household Income") 
+legend("topright",
+       legend = levels(factor(finaldata$PopulationDen)),
+       pch = 19,
+       col = factor(levels(factor(finaldata$PopulationDen))))
+plot(MedianHouseholdIncome~Obesity, col=factor(ElectionResults),data=finaldata,xlab="Obesity Rate",ylab="Median Household Income") 
+legend("topright",
+       legend = levels(factor(finaldata$ElectionResults)),
+       pch = 19,
+       col = factor(levels(factor(finaldata$ElectionResults))))
+
+
+plot(MedianHouseholdIncome~MedianAge, col=factor(SexMajority),data=finaldata,xlab="Median Age",ylab="Median Household Income") 
+legend("topright",
+       legend = levels(factor(finaldata$SexMajority)),
+       pch = 19,
+       col = factor(levels(factor(finaldata$SexMajority))))
+plot(MedianHouseholdIncome~MedianAge, col=factor(PopulationDen),data=finaldata,xlab="Median Age",ylab="Median Household Income") 
+legend("topright",
+       legend = levels(factor(finaldata$PopulationDen)),
+       pch = 19,
+       col = factor(levels(factor(finaldata$PopulationDen))))
+plot(MedianHouseholdIncome~MedianAge, col=factor(ElectionResults),data=finaldata,xlab="Median Age",ylab="Median Household Income") 
+legend("topright",
+       legend = levels(factor(finaldata$ElectionResults)),
+       pch = 19,
+       col = factor(levels(factor(finaldata$ElectionResults))))
+
+
+plot(MedianHouseholdIncome~TotalPop, col=factor(SexMajority),data=finaldata,xlab="Total Population",ylab="Median Household Income") 
+legend("topright",
+       legend = levels(factor(finaldata$SexMajority)),
+       pch = 19,
+       col = factor(levels(factor(finaldata$SexMajority))))
+plot(MedianHouseholdIncome~TotalPop, col=factor(PopulationDen),data=finaldata,xlab="Total Population",ylab="Median Household Income") 
+legend("topright",
+       legend = levels(factor(finaldata$PopulationDen)),
+       pch = 19,
+       col = factor(levels(factor(finaldata$PopulationDen))))
+plot(MedianHouseholdIncome~TotalPop, col=factor(ElectionResults),data=finaldata,xlab="Total Population",ylab="Median Household Income") 
+legend("topright",
+       legend = levels(factor(finaldata$ElectionResults)),
+       pch = 19,
+       col = factor(levels(factor(finaldata$ElectionResults))))
+
+
+plot(MedianHouseholdIncome~UnemploymentRate, col=factor(SexMajority),data=finaldata,xlab="Unemployment Rate",ylab="Median Household Income") 
+legend("topright",
+       legend = levels(factor(finaldata$SexMajority)),
+       pch = 19,
+       col = factor(levels(factor(finaldata$SexMajority))))
+plot(MedianHouseholdIncome~UnemploymentRate, col=factor(PopulationDen),data=finaldata,xlab="Unemployment Rate",ylab="Median Household Income") 
+legend("topright",
+       legend = levels(factor(finaldata$PopulationDen)),
+       pch = 19,
+       col = factor(levels(factor(finaldata$PopulationDen))))
+plot(MedianHouseholdIncome~UnemploymentRate, col=factor(ElectionResults),data=finaldata,xlab="Unemployment Rate",ylab="Median Household Income") 
+legend("topright",
+       legend = levels(factor(finaldata$ElectionResults)),
+       pch = 19,
+       col = factor(levels(factor(finaldata$ElectionResults))))
+
+##significance testing##
+income3<-lm(MedianHouseholdIncome~Obesity + PercentBachelors + MedianAge + ElectionResults + PopulationDen + SexMajority + Obesity*PercentBachelors + PopulationDen*ElectionResults + PercentBachelors*ElectionResults + Obesity*ElectionResults, data=finaldata)
+summary(income3)
+
+redincome3<-lm(MedianHouseholdIncome~Obesity + PercentBachelors + MedianAge + ElectionResults + PopulationDen + SexMajority + Obesity*PercentBachelors + PercentBachelors*ElectionResults + Obesity*ElectionResults, data=finaldata)
+anova(redincome3, income3)
+
+income4<-lm(MedianHouseholdIncome~Obesity + MedianAge + PercentBachelors + ElectionResults + PopulationDen + SexMajority + Obesity*PercentBachelors + PercentBachelors*ElectionResults + Obesity*ElectionResults, data=finaldata)
+summary(income4)
+
+income5<-lm(MedianHouseholdIncome~Obesity + PercentBachelors + ElectionResults + PopulationDen + SexMajority + Obesity*PercentBachelors + PercentBachelors*ElectionResults + Obesity*ElectionResults, data=finaldata)
+summary(income5)
+
+##Assumptions##
+residualPlots(income5,tests=F)
+
+plot(income5, which=c(1,2))
+
+hist(residuals(income5))
+
+income6<-lm(log(MedianHouseholdIncome)~Obesity + PercentBachelors + ElectionResults + PopulationDen + SexMajority + Obesity*PercentBachelors + PercentBachelors*ElectionResults + Obesity*ElectionResults, data=finaldata)
+summary(income6)
+
+##Additional Techniques## 
+#Cooks Distance Thresholds
+plot(income5,which=4)
+
+#Leverage vs Studentized Residuals
+influencePlot(income5,fill=F)
+
+dffits(income5)[c(2,6,44)]
+
+subsetfinal<-finaldata[-c(2, 6, 44),]
+
+income7<-lm(log(MedianHouseholdIncome)~Obesity + PercentBachelors + ElectionResults + PopulationDen + SexMajority + Obesity*PercentBachelors + PercentBachelors*ElectionResults + Obesity*ElectionResults, data=subsetfinal)
+summary(income7)
+
+plot(fitted(income5), resid(income5), xlab='Fitted Values', ylab='Residuals')
+abline(0,0)
+
+wt <- 1/lm(abs(income5$residuals)~income5$fitted.values)$fitted.values^2
+
+wls_model <- lm(MedianHouseholdIncome~Obesity + PercentBachelors + ElectionResults + PopulationDen + SexMajority + Obesity*PercentBachelors + PercentBachelors*ElectionResults + Obesity*ElectionResults, data=finaldata, weights=wt)
+
+summary(wls_model)
+
+```
+
+```{r, echo=FALSE}
+## Use this section to output the summary of your final model
+## Include the relevant plots from EDA, assumptions, and your additional techniques
+## This should NOT be a dump of all of your plots and outputs.
+## Refer to the Rmarkdown guide for sizing information on your plots
+
+
+##EDA Graphs for analysis## 
+
+hist(finaldata$MedianHouseholdIncome, xlab="Median Household Income in the US (2021)", 
+     main="Histogram of Median Household Income")
+round(cor(finaldata[6:10],finaldata$MedianHouseholdIncome),3)
+
+incomecor<-round(cor(finaldata[,6:10]),4)
+corrplot(incomecor)
+
+income1<-lm(MedianHouseholdIncome~
+              TotalPop+MedianAge+UnemploymentRate+Obesity+PercentBachelors,
+            data=finaldata)
+
+income1vif<-round(vif(income1),3)
+income1vif
+mean(income1vif)
+
+##Variable Screening##
+
+ols_step_backward_p(income1,prem=0.15,details=F)
+
+ols_step_forward_p(income1,penter=0.15,details=F)
+
+ols_step_both_p(income1,pent=0.15,prem=0.15,details=F)
+
+##Important Interactions##
+interaction.plot(finaldata$PopulationDen, finaldata$ElectionResults, finaldata$MedianHouseholdIncome,fun=mean,trace.label="Election Results", xlab="Population Density",ylab="Median Household Income")
+
+plot(MedianHouseholdIncome~PercentBachelors, col=factor(ElectionResults),data=finaldata,xlab="Percent Bachelors",ylab="Median Household Income") 
+legend("topright",
+       legend = levels(factor(finaldata$ElectionResults)),
+       pch = 19,
+       col = factor(levels(factor(finaldata$ElectionResults))))
+
+plot(MedianHouseholdIncome~Obesity, col=factor(ElectionResults),data=finaldata,xlab="Obesity Rate",ylab="Median Household Income") 
+legend("topright",
+       legend = levels(factor(finaldata$ElectionResults)),
+       pch = 19,
+       col = factor(levels(factor(finaldata$ElectionResults))))
+
+##original model##
+income3<-lm(MedianHouseholdIncome~Obesity + PercentBachelors + MedianAge + ElectionResults + PopulationDen + SexMajority + Obesity*PercentBachelors + PopulationDen*ElectionResults + PercentBachelors*ElectionResults + Obesity*ElectionResults, data=finaldata)
+summary(income3)
+
+##violated assumption##
+residualPlots(income5,tests=F)
+
+##transformation for violated assumption##
+income6<-lm(log(MedianHouseholdIncome)~Obesity + PercentBachelors + ElectionResults + PopulationDen + SexMajority + Obesity*PercentBachelors + PercentBachelors*ElectionResults + Obesity*ElectionResults, data=finaldata)
+summary(income6)
+
+##regression with influential observations removed##
+subsetfinal<-finaldata[-c(2, 6, 44),]
+
+income7<-lm(log(MedianHouseholdIncome)~Obesity + PercentBachelors + ElectionResults + PopulationDen + SexMajority + Obesity*PercentBachelors + PercentBachelors*ElectionResults + Obesity*ElectionResults, data=subsetfinal)
+summary(income7)
+
+##weighted least regression##
+wt <- 1/lm(abs(income5$residuals)~income5$fitted.values)$fitted.values^2
+
+wls_model <- lm(MedianHouseholdIncome~Obesity + PercentBachelors + ElectionResults + PopulationDen + SexMajority + Obesity*PercentBachelors + PercentBachelors*ElectionResults + Obesity*ElectionResults, data=finaldata, weights=wt)
+
+summary(wls_model)
+
+
+##final model with summary##
+income8<-lm(log(MedianHouseholdIncome)~Obesity + PercentBachelors + ElectionResults + PopulationDen + SexMajority + Obesity*PercentBachelors + PercentBachelors*ElectionResults + Obesity*ElectionResults, data=subsetfinal)
+summary(income8)
+```
+
+\newpage
+
+## Appendix D: References
+
+1.  Associated Press. (2020). Data Solutions. <https://www.ap.org/content/data/> Horowitz, J. M., Igielnik, R., & Kochhar, R. (2020, January 9). 1. trends in income and wealth inequality. Pew Research Center's Social & Demographic Trends Project. <https://www.pewresearch.org/social-trends/2020/01/09/trends-in-income-and-wealth-inequality/>
+
+2.  Kolko, J. (2023, June 15). Geographic inequality on the rise in the U.S. U.S. Department of Commerce. <https://www.commerce.gov/news/blog/2023/06/geographic-inequality-rise-us>
+
+3.  U.S. General Services Administration,. (2023, September 15). National Obesity by State. Data.gov. <https://catalog.data.gov/dataset/national-obesity-by-state-d765a>
+
+4.  United States Census Bureau. (2020a). ACS 2020 (5-Year Estimates) - Sex Majority/Median Household Income. Social explorer. <https://www.socialexplorer.com/tables/ACS2020_5yr/R13464799>
+
+5.  United States Census Bureau. (2020b). ACS 2020 (5-Year Estimates) - Total Population. Social explorer. <https://www.socialexplorer.com/tables/ACS2020_5yr/R13464799>
+
+6.  United States Census Bureau. (2020c). ACS 2020 (5-Year Estimates) - Unemployment Rate. Social Explorer. <https://www.socialexplorer.com/tables/ACS2020_5yr/R13464799>
+
+7.  United States Census Bureau. (2020d). Population Density of the 50 States, the District of Columbia, and Puerto Rico: 1910 to 2020. Index of /programs-surveys/decennial/2020/data/apportionment. <https://www2.census.gov/programs-surveys/decennial/2020/data/apportionment/>
+
+8.  United States Census Bureau. (2021a). ACS 2021 (5-Year Estimates) - Median Age. Social explorer. <https://www.socialexplorer.com/tables/ACS2021_5yr/R13464829>
+
+9.  United States Census Bureau. (2021b). Educational Attainment. <https://data.census.gov/table/ACSST1Y2021.S1501?q=S1501&g=010XX00US%240400000&moe=false&tp=false>
+
+10. Bishaw, A., & Posey, K. (2022, November 17). *A comparison of rural and Urban America: Household Income and Poverty*. Census.gov. <https://www.census.gov/newsroom/blogs/random-samplings/2016/12/a_comparison_of_rura.html#:~:text=The%20U.S.%20Census%20Bureau%20today,rates%20than%20their%20urban%20counterparts.>

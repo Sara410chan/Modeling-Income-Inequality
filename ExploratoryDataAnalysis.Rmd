@@ -1,6 +1,5 @@
 ---
 title: "Exploratory Data Analysis"
-author: "Colin White and Delaney Clifford"
 date: "2023-10-17"
 output: pdf_document
 ---

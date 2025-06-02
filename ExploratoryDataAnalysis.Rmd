@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r, echo = FALSE}
-finaldata1<-read.csv("/Users/colin.10/Desktop/STAT 3220/Project/FinalData.csv")
+finaldata1<-read.csv("/Users/sarachan/Desktop/STAT 3220/Project/FinalData.csv")
 ```
 
 # Exploratory Data Analysis
